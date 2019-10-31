@@ -112,16 +112,19 @@ class _FriendsState extends State<FriendsPage> {
           showUnselectedLabels: false,
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.people),
-              title: Text(''),
-            ),
+                icon: Icon(Icons.people),
+                title: Text('friend'),
+                activeIcon: Icon(
+                  Icons.people,
+                  size: 45,
+                )),
             BottomNavigationBarItem(
               icon: Icon(Icons.chat_bubble_outline),
-              title: Text(''),
+              title: Text('chat room'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.picture_as_pdf),
-              title: Text(''),
+              title: Text('timeline'),
             ),
           ],
           selectedItemColor: Colors.blue,
