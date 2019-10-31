@@ -28,7 +28,9 @@ class _HomePageState extends State<HomePage> {
     if (user != null) {
       print(user);
       print("Already singed-in with");
-      Navigator.pushReplacementNamed(context, '/friend');
+//      Navigator.pushReplacementNamed(context, '/friend', arguments: user);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => FriendsPage(user)));
     }
   }
 
@@ -145,7 +147,8 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(color: Color(0xffEC5569)),
                       ),
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/phoneregister');
+                        Navigator.pushReplacementNamed(
+                            context, '/phoneregister');
 //                        Navigator.push(
 //                            context,
 //                            MaterialPageRoute(

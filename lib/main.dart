@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:new_flutter/pages/friends.dart';
 import 'package:new_flutter/pages/home.dart';
 import 'package:new_flutter/pages/phoneRegister.dart';
 import 'package:new_flutter/pages/register.dart';
@@ -14,7 +13,7 @@ class MyApp extends StatelessWidget {
       home: HomePage(),
       title: 'Sanook',
       routes: {
-        '/friend': (context) => FriendsPage(),
+//        '/friend': (context) => FriendsPage(),
         '/register': (context) => Register(),
         '/phoneregister': (context) =>PhoneRegister()
       },
