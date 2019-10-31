@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   Future checkAuth(BuildContext context) async {
     FirebaseUser user = await firebaseAuth.currentUser();
     if (user != null) {
+      print(user);
       print("Already singed-in with");
       Navigator.pushReplacementNamed(context, '/friend');
     }
@@ -41,6 +42,20 @@ class _HomePageState extends State<HomePage> {
     }).catchError((error) {
       print(' Error=> $error');
     });
+  }
+
+  Widget buildOtherLine() {
+    return Container(
+        margin: EdgeInsets.only(top: 16),
+        padding: EdgeInsets.fromLTRB(50, 0, 50, 0),
+        child: Row(children: <Widget>[
+          Expanded(child: Divider(color: Color(0xffEC5569))),
+          Padding(
+              padding: EdgeInsets.all(6),
+              child: Text("Don’t have an account?",
+                  style: TextStyle(color: Color(0xffEC5569)))),
+          Expanded(child: Divider(color: Color(0xffEC5569))),
+        ]));
   }
 
   @override
@@ -101,6 +116,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
+                buildOtherLine(),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
                   child: ButtonTheme(
@@ -108,6 +124,7 @@ class _HomePageState extends State<HomePage> {
                     child: RaisedButton(
                       child: Text('Register'),
                       onPressed: () {
+                        Navigator.pushNamed(context, '/register');
                         // Navigator.pushReplacementNamed(context, '/friend'); // with out back arrow
 //                        Navigator.push(
 //                            context,
@@ -123,16 +140,18 @@ class _HomePageState extends State<HomePage> {
                   child: ButtonTheme(
                     minWidth: double.infinity,
                     child: RaisedButton(
-                      child: Text('Friend'),
+                      child: Text(
+                        'Login With Mobile',
+                        style: TextStyle(color: Color(0xffEC5569)),
+                      ),
                       onPressed: () {
-                        Navigator.pushReplacementNamed(
-                            context, '/friend'); // with out back arrow
+                        Navigator.pushReplacementNamed(context, '/phoneregister');
 //                        Navigator.push(
 //                            context,
 //                            MaterialPageRoute(
 //                                builder: (context) => FriendsPage()));
                       },
-                      color: Colors.black12,
+                      color: Colors.white,
                     ),
                   ),
                 )

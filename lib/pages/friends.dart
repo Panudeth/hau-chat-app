@@ -34,7 +34,7 @@ class _FriendsState extends State<FriendsPage> {
           title: Text('Friend'),
         ),
         body: RaisedButton(
-            child: Text('OK'),
+            child: Text('LOGOUT'),
             onPressed: () {
               signOut(context);
             })

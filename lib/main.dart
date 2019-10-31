@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:new_flutter/pages/friends.dart';
 import 'package:new_flutter/pages/home.dart';
+import 'package:new_flutter/pages/phoneRegister.dart';
 import 'package:new_flutter/pages/register.dart';
 
 void main() => runApp(MyApp());
@@ -14,7 +15,8 @@ class MyApp extends StatelessWidget {
       title: 'Sanook',
       routes: {
         '/friend': (context) => FriendsPage(),
-        '/register': (context) => Register()
+        '/register': (context) => Register(),
+        '/phoneregister': (context) =>PhoneRegister()
       },
     );
   }
