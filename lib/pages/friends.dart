@@ -40,54 +40,97 @@ class _FriendsState extends State<FriendsPage> {
         ),
         body: Column(
           children: <Widget>[
-            TextField(
-              decoration: InputDecoration(
-                  suffixIcon: Icon(Icons.search),
-                  hintText: 'Search',
-                  border: OutlineInputBorder(),
-                  isDense: true,
-                  contentPadding: EdgeInsets.all(8.0)),
+            Container(
+              color: Colors.black87,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  decoration: InputDecoration(
+                      suffixIcon: Icon(
+                        Icons.search,
+                        size: 15.0,
+                      ),
+                      hintText: 'Search',
+                      border: OutlineInputBorder(),
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(6.0)),
+                ),
+              ),
             ),
+            ListTile(
+              onTap: () {},
+              leading: CircleAvatar(
+                radius: 40,
+                child: Text(
+                  widget.user.email.substring(0, 1).toUpperCase(),
+                  style: TextStyle(fontSize: 30.0),
+                ),
+              ),
+              title: Text(
+                widget.user.email,
+                style: TextStyle(fontSize: 20.0),
+              ),
+              subtitle: Text(
+                widget.user.uid,
+              ),
+            ),
+            Divider(),
             ButtonTheme(
               child: RaisedButton(
                 onPressed: () {},
                 color: Colors.black45,
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        radius: 35,
-                        child: Text(
-                          widget.user.email.substring(0, 1).toUpperCase(),
-                          style: TextStyle(fontSize: 30.0),
-                        ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 25,
+                      child: Text(
+                        widget.user.email.substring(0, 1).toUpperCase(),
+                        style: TextStyle(fontSize: 30.0),
                       ),
-                      title: Text(
-                        widget.user.email,
-                        style: TextStyle(fontSize: 20.0),
-                      ),
-                      subtitle: Text(
-                        widget.user.uid,
-                      ),
+                    ),
+                    title: Text(
+                      widget.user.email,
+                      style: TextStyle(fontSize: 20.0),
+                    ),
+                    subtitle: Text(
+                      widget.user.uid,
                     ),
                   ),
                 ),
               ),
             ),
-            Divider(),
             RaisedButton(
                 child: Text('LOGOUT'),
                 onPressed: () {
                   signOut(context);
                 }),
           ],
-        )
-//      Column(
-//        children: list
-//            .map((item) => item != 'yyy' ? Text(item) : Container())
-//            .toList(),
-//      ),
-        );
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.people),
+              title: Text(''),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.chat_bubble_outline),
+              title: Text(''),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.picture_as_pdf),
+              title: Text(''),
+            ),
+          ],
+          selectedItemColor: Colors.blue,
+        ));
   }
 }
+
+Widget btnBar = BottomNavigationBar(items: [
+  BottomNavigationBarItem(icon: Icon(Icons.people)),
+  BottomNavigationBarItem(icon: Icon(Icons.people)),
+  BottomNavigationBarItem(icon: Icon(Icons.people))
+]);
