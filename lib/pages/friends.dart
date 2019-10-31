@@ -40,6 +40,14 @@ class _FriendsState extends State<FriendsPage> {
         ),
         body: Column(
           children: <Widget>[
+            TextField(
+              decoration: InputDecoration(
+                  suffixIcon: Icon(Icons.search),
+                  hintText: 'Search',
+                  border: OutlineInputBorder(),
+                  isDense: true,
+                  contentPadding: EdgeInsets.all(8.0)),
+            ),
             ButtonTheme(
               child: RaisedButton(
                 onPressed: () {},
@@ -62,12 +70,12 @@ class _FriendsState extends State<FriendsPage> {
                       subtitle: Text(
                         widget.user.uid,
                       ),
-                      trailing: Icon(Icons.chevron_right),
                     ),
                   ),
                 ),
               ),
             ),
+            Divider(),
             RaisedButton(
                 child: Text('LOGOUT'),
                 onPressed: () {
