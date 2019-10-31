@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:new_flutter/model/login.dart';
 import 'package:new_flutter/pages/home.dart';
 
 class FriendsPage extends StatefulWidget {
@@ -30,10 +29,6 @@ class _FriendsState extends State<FriendsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ModalRoute.of(context).settings.arguments;
-    var loginModel = Login();
-//    loginModel.email = user.uid;
-//    String email = user.email;
     print({'555': 555, "user": widget.user.email});
     return Scaffold(
         appBar: AppBar(
@@ -45,39 +40,39 @@ class _FriendsState extends State<FriendsPage> {
         ),
         body: Column(
           children: <Widget>[
-            Expanded(
-              child: Container(
-                  child: ListView(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      children: <Widget>[
-                        CircleAvatar(
-                          radius: 35,
-                          child: Text(
-                            widget.user.email.substring(0, 1).toUpperCase(),
-                            style: TextStyle(fontSize: 30.0),
-                          ),
+            ButtonTheme(
+              child: RaisedButton(
+                onPressed: () {},
+                color: Colors.black45,
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        radius: 35,
+                        child: Text(
+                          widget.user.email.substring(0, 1).toUpperCase(),
+                          style: TextStyle(fontSize: 30.0),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(20.0, 0, 0, 0),
-                          child: Text(
-                            widget.user.email,
-                            style: TextStyle(fontSize: 20.0),
-                          ),
-                        ),
-                      ],
+                      ),
+                      title: Text(
+                        widget.user.email,
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                      subtitle: Text(
+                        widget.user.uid,
+                      ),
+                      trailing: Icon(Icons.chevron_right),
                     ),
                   ),
-                  RaisedButton(
-                      child: Text('LOGOUT'),
-                      onPressed: () {
-                        signOut(context);
-                      })
-                ],
-              )),
+                ),
+              ),
             ),
+            RaisedButton(
+                child: Text('LOGOUT'),
+                onPressed: () {
+                  signOut(context);
+                }),
           ],
         )
 //      Column(
