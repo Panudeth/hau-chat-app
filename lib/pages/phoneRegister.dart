@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:new_flutter/pages/home.dart';
 
 class PhoneRegister extends StatefulWidget {
   @override
@@ -173,21 +172,4 @@ class _PhoneRegisterState extends State<PhoneRegister> {
     });
 //    navigateToHomepage(context, user);
   }
-
-//  verifyPhone() async {
-//    FirebaseUser user = (await fireAuth.signInWithCredential(
-//            PhoneAuthProvider.getCredential(
-//                verificationId: _verificationId, smsCode: smsController.text)))
-//        .user;
-//    checkAuth(context);
-////    navigateToHomepage(context, user);
-//  }
-
-//  void navigateToHomepage(BuildContext context, FirebaseUser user) {
-//    Navigator.pushAndRemoveUntil(
-//        context,
-//        MaterialPageRoute(builder: (context) => HomePage(user)),
-//        ModalRoute.withName('/'));
-//    print(user);
-//  }
 }

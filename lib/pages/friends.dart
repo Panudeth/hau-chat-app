@@ -29,7 +29,6 @@ class _FriendsState extends State<FriendsPage> {
 
   @override
   Widget build(BuildContext context) {
-    print({'555': 555, "user": widget.user.email});
     return Scaffold(
         appBar: AppBar(
           title: Center(child: Text('Home')),
@@ -38,10 +37,9 @@ class _FriendsState extends State<FriendsPage> {
             IconButton(icon: Icon(Icons.add), onPressed: () {})
           ],
         ),
-        body: Column(
+        body: ListView(
           children: <Widget>[
             Container(
-              color: Colors.black87,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
@@ -62,16 +60,16 @@ class _FriendsState extends State<FriendsPage> {
               leading: CircleAvatar(
                 radius: 40,
                 child: Text(
-                  widget.user.email.substring(0, 1).toUpperCase(),
+                  widget.user.displayName.substring(0, 1).toUpperCase(),
                   style: TextStyle(fontSize: 30.0),
                 ),
               ),
               title: Text(
-                widget.user.email,
+                widget.user.displayName,
                 style: TextStyle(fontSize: 20.0),
               ),
               subtitle: Text(
-                widget.user.uid,
+                widget.user.email,
               ),
             ),
             Divider(),
@@ -101,6 +99,11 @@ class _FriendsState extends State<FriendsPage> {
               ),
             ),
             RaisedButton(
+                child: Text('USER'),
+                onPressed: () {
+                  print(widget.user.displayName);
+                }),
+            RaisedButton(
                 child: Text('LOGOUT'),
                 onPressed: () {
                   signOut(context);
@@ -119,11 +122,12 @@ class _FriendsState extends State<FriendsPage> {
                   size: 45,
                 )),
             BottomNavigationBarItem(
+              backgroundColor: Colors.black87,
               icon: Icon(Icons.chat_bubble_outline),
               title: Text('chat room'),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.picture_as_pdf),
+              icon: Icon(Icons.chrome_reader_mode),
               title: Text('timeline'),
             ),
           ],

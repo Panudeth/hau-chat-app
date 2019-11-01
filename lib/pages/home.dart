@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:new_flutter/pages/createUser.dart';
 import 'package:new_flutter/pages/friends.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,11 +27,15 @@ class _HomePageState extends State<HomePage> {
   Future checkAuth(BuildContext context) async {
     FirebaseUser user = await firebaseAuth.currentUser();
     if (user != null) {
-      print(user);
-      print("Already singed-in with");
+      if (user.displayName != null) {
 //      Navigator.pushReplacementNamed(context, '/friend', arguments: user);
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => FriendsPage(user)));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => FriendsPage(user)));
+      }else {
+//      Navigator.pushReplacementNamed(context, '/friend', arguments: user);
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => CreateUser(user)));
+      }
     }
   }
 
