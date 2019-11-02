@@ -24,17 +24,23 @@ class _HomePageState extends State<HomePage> {
     checkAuth(context);
   }
 
+  void signOut(BuildContext context) {
+    firebaseAuth.signOut();
+  }
+
   Future checkAuth(BuildContext context) async {
     FirebaseUser user = await firebaseAuth.currentUser();
     if (user != null) {
-      if (user.displayName != null) {
-//      Navigator.pushReplacementNamed(context, '/friend', arguments: user);
+      if (user.displayName != null && user.displayName != "") {
+        print({'if go to friend': user});
+        print({'if go to friend': user.displayName});
+
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => FriendsPage(user)));
-      }else {
-//      Navigator.pushReplacementNamed(context, '/friend', arguments: user);
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => CreateUser(user)));
+      } else {
+        print({'else go to create': user});
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => CreateUser(user)));
       }
     }
   }
@@ -158,6 +164,22 @@ class _HomePageState extends State<HomePage> {
 //                            context,
 //                            MaterialPageRoute(
 //                                builder: (context) => FriendsPage()));
+                      },
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+                  child: ButtonTheme(
+                    minWidth: double.infinity,
+                    child: RaisedButton(
+                      child: Text(
+                        'Login Out',
+                        style: TextStyle(color: Color(0xffEC5569)),
+                      ),
+                      onPressed: () {
+                        signOut(context);
                       },
                       color: Colors.white,
                     ),
