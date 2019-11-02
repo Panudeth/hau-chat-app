@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:new_flutter/pages/createUser.dart';
 import 'package:new_flutter/pages/friends.dart';
+import 'package:toast/toast.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -32,13 +33,9 @@ class _HomePageState extends State<HomePage> {
     FirebaseUser user = await firebaseAuth.currentUser();
     if (user != null) {
       if (user.displayName != null && user.displayName != "") {
-        print({'if go to friend': user});
-        print({'if go to friend': user.displayName});
-
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => FriendsPage(user)));
       } else {
-        print({'else go to create': user});
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => CreateUser(user)));
       }
@@ -53,6 +50,8 @@ class _HomePageState extends State<HomePage> {
       print(' Success=> $user');
       checkAuth(context);
     }).catchError((error) {
+      Toast.show(error.message, context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.TOP);
       print(' Error=> $error');
     });
   }

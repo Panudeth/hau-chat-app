@@ -37,6 +37,10 @@ class _CreateUserState extends State<CreateUser> {
         MaterialPageRoute(builder: (context) => FriendsPage(firebaseUser)));
   }
 
+  void signOut(BuildContext context) {
+    firebaseAuth.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     print(widget.user);
@@ -57,6 +61,12 @@ class _CreateUserState extends State<CreateUser> {
                     updateUserDisplay();
                   },
                   child: Text('Create User'),
+                ),
+                RaisedButton(
+                  onPressed: () {
+                    signOut(context);
+                  },
+                  child: Text('Log Out'),
                 )
               ],
             ),

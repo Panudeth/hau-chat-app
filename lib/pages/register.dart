@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'createUser.dart';
+import 'friends.dart';
+
 class Register extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -23,10 +26,34 @@ class _RegisterState extends State<Register> {
     final FirebaseUser firebaseUser = await firebaseAuth
         .createUserWithEmailAndPassword(email: username, password: password)
         .then((user) {
-      print('SignUp Success');
+      signIn();
     }).catchError((final error) {
       print('Error => $error');
     });
+  }
+
+  void signIn() {
+    firebaseAuth
+        .signInWithEmailAndPassword(
+            email: _usernameController.text, password: _passwordController.text)
+        .then((user) {
+      checkAuth(context);
+    }).catchError((error) {
+      print(' Error=> $error');
+    });
+  }
+
+  Future checkAuth(BuildContext context) async {
+    FirebaseUser user = await firebaseAuth.currentUser();
+    if (user != null) {
+      if (user.displayName != null && user.displayName != "") {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => FriendsPage(user)));
+      } else {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => CreateUser(user)));
+      }
+    }
   }
 
   @override

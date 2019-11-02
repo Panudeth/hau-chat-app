@@ -27,6 +27,7 @@ dependencies:
   firebase_core: ^0.4.0+9
   firebase_auth: ^0.14.0+5
   cloud_firestore: ^0.12.9+6
+  toast: ^0.1.5
   splashscreen: any
 
 dev_dependencies:
