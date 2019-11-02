@@ -1,7 +1,8 @@
+import 'package:badges/badges.dart';
+import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'friends.dart';
 
 class CreateUser extends StatefulWidget {
@@ -52,22 +53,59 @@ class _CreateUserState extends State<CreateUser> {
       body: Container(
         child: Center(
           child: Container(
-            child: Column(
+            child: ListView(
               children: <Widget>[
-                TextField(
-                  controller: _displayName,
+                Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 20.0, 0, 20.0),
+                      child: GestureDetector(
+                          onTap: () {
+                            print('555');
+                          },
+                          child: Badge(
+                            badgeColor: Colors.black26,
+                            position: BadgePosition.bottomRight(),
+                            toAnimate: false,
+                            badgeContent: Icon(Icons.camera_alt),
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  'https://image.shutterstock.com/image-vector/social-media-avatar-user-icon-260nw-1061793911.jpg'),
+                              radius: 50.0,
+                            ),
+                          )),
+                    )
+                  ],
                 ),
-                RaisedButton(
-                  onPressed: () {
-                    updateUserDisplay();
-                  },
-                  child: Text('Create User'),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(50.0, 10.0, 50.0, 10.0),
+                  child: TextField(
+                    style: Theme.of(context).textTheme.title,
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(8.0),
+                        hintText: 'Display',
+                        border: OutlineInputBorder(),
+                        isDense: true),
+                    controller: _displayName,
+                  ),
                 ),
-                RaisedButton(
-                  onPressed: () {
-                    signOut(context);
-                  },
-                  child: Text('Log Out'),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(50.0, 0, 50.0, 0),
+                  child: RaisedButton(
+                    onPressed: () {
+                      updateUserDisplay();
+                    },
+                    child: Text('Create User'),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(50.0, 0, 50.0, 0),
+                  child: RaisedButton(
+                    onPressed: () {
+                      signOut(context);
+                    },
+                    child: Text('Log Out'),
+                  ),
                 )
               ],
             ),
