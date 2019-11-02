@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:new_flutter/pages/createUser.dart';
 import 'package:new_flutter/pages/friends.dart';
+import 'package:new_flutter/pages/register.dart';
 import 'package:toast/toast.dart';
 
 class HomePage extends StatefulWidget {
@@ -136,12 +137,10 @@ class _HomePageState extends State<HomePage> {
                     child: RaisedButton(
                       child: Text('Register'),
                       onPressed: () {
-                        Navigator.pushNamed(context, '/register');
-                        // Navigator.pushReplacementNamed(context, '/friend'); // with out back arrow
-//                        Navigator.push(
-//                            context,
-//                            MaterialPageRoute(
-//                                builder: (context) => FriendsPage()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Register()));
                       },
                       color: Colors.black12,
                     ),

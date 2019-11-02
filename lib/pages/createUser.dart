@@ -33,6 +33,7 @@ class _CreateUserState extends State<CreateUser> {
     FirebaseUser firebaseUser = await firebaseAuth.currentUser();
     await firebaseUser?.reload();
     firebaseUser = await firebaseAuth.currentUser();
+    Navigator.of(context).popUntil((route) => route.isFirst);
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (context) => FriendsPage(firebaseUser)));
   }
