@@ -30,6 +30,7 @@ dependencies:
   toast: ^0.1.5
   circular_profile_avatar: ^1.0.2
   badges: ^1.1.0
+  image_picker: ^0.6.1+10
   splashscreen: any
 
 dev_dependencies:

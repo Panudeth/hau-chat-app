@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:badges/badges.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'friends.dart';
 
 class CreateUser extends StatefulWidget {
@@ -15,6 +18,7 @@ class CreateUser extends StatefulWidget {
 
 class _CreateUserState extends State<CreateUser> {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  File _image;
   TextEditingController _displayName = TextEditingController();
 
   void updateUserDisplay() {
@@ -43,6 +47,13 @@ class _CreateUserState extends State<CreateUser> {
     firebaseAuth.signOut();
   }
 
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    setState(() {
+      _image = image;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     print(widget.user);
@@ -61,19 +72,31 @@ class _CreateUserState extends State<CreateUser> {
                       padding: const EdgeInsets.fromLTRB(0, 20.0, 0, 20.0),
                       child: GestureDetector(
                           onTap: () {
-                            print('555');
+//                            print('555');
+                            getImage();
                           },
-                          child: Badge(
-                            badgeColor: Colors.black26,
-                            position: BadgePosition.bottomRight(),
-                            toAnimate: false,
-                            badgeContent: Icon(Icons.camera_alt),
-                            child: CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                  'https://image.shutterstock.com/image-vector/social-media-avatar-user-icon-260nw-1061793911.jpg'),
-                              radius: 50.0,
-                            ),
-                          )),
+                          child: _image == null
+                              ? Badge(
+                                  badgeColor: Colors.black26,
+                                  position: BadgePosition.bottomRight(),
+                                  toAnimate: false,
+                                  badgeContent: Icon(Icons.camera_alt),
+                                  child: CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                        'https://image.shutterstock.com/image-vector/social-media-avatar-user-icon-260nw-1061793911.jpg'),
+                                    radius: 50.0,
+                                  ),
+                                )
+                              : Badge(
+                                  badgeColor: Colors.black26,
+                                  position: BadgePosition.bottomRight(),
+                                  toAnimate: false,
+                                  badgeContent: Icon(Icons.camera_alt),
+                                  child: CircleAvatar(
+                                    backgroundImage: FileImage(_image),
+                                    radius: 50.0,
+                                  ),
+                                )),
                     )
                   ],
                 ),
