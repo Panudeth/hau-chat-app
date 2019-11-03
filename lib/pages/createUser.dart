@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:badges/badges.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'friends.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CreateUser extends StatefulWidget {
   final FirebaseUser user;
@@ -16,7 +18,8 @@ class CreateUser extends StatefulWidget {
 
 class _CreateUserState extends State<CreateUser> {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  File _image;
+  File fileImage;
+  String base64Image;
   TextEditingController _displayName = TextEditingController();
 
   void updateUserDisplay() {
@@ -24,12 +27,25 @@ class _CreateUserState extends State<CreateUser> {
       UserUpdateInfo updateUser = UserUpdateInfo();
       updateUser.displayName = _displayName.text;
       val.updateProfile(updateUser).then((user) {
-        print('success');
-        getDisplayUser();
+        UpdateUserData();
       }).catchError((e) {
         print(e.message);
       });
     });
+  }
+
+  Future UpdateUserData() async {
+    Map<String, dynamic> map = Map();
+    map['uid'] = widget.user.uid;
+    map['email'] = widget.user.email;
+    map['displayName'] = _displayName.text;
+    map['imgAvatar'] = base64Image;
+
+    await Firestore.instance
+        .collection('users')
+        .document(widget.user.uid)
+        .setData(map)
+        .then((res) => {getDisplayUser()});
   }
 
   void getDisplayUser() async {
@@ -69,22 +85,24 @@ class _CreateUserState extends State<CreateUser> {
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    List<int> imageBytes = await image.readAsBytes();
     setState(() {
-      _image = image;
+      fileImage = image;
+      base64Image = base64Encode(imageBytes);
     });
   }
 
   Future getImageGallery() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    print(image);
+    List<int> imageBytes = await image.readAsBytes();
     setState(() {
-      _image = image;
+      fileImage = image;
+      base64Image = base64Encode(imageBytes);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    print(widget.user);
     return Scaffold(
       appBar: AppBar(
         title: Text('Create User'),
@@ -102,7 +120,7 @@ class _CreateUserState extends State<CreateUser> {
                           onTap: () {
                             _settingModalBottomSheet(context);
                           },
-                          child: _image == null
+                          child: fileImage == null
                               ? Badge(
                                   badgeColor: Colors.black26,
                                   position: BadgePosition.bottomRight(),
@@ -120,7 +138,7 @@ class _CreateUserState extends State<CreateUser> {
                                   toAnimate: false,
                                   badgeContent: Icon(Icons.camera_alt),
                                   child: CircleAvatar(
-                                    backgroundImage: FileImage(_image),
+                                    backgroundImage: FileImage(fileImage),
                                     radius: 50.0,
                                   ),
                                 )),
