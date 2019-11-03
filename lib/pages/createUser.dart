@@ -1,7 +1,5 @@
 import 'dart:io';
-
 import 'package:badges/badges.dart';
-import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -47,8 +45,38 @@ class _CreateUserState extends State<CreateUser> {
     firebaseAuth.signOut();
   }
 
+  void _settingModalBottomSheet(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            child: new Wrap(
+              children: <Widget>[
+                new ListTile(
+                    leading: new Icon(Icons.camera_alt),
+                    title: new Text('Camera'),
+                    onTap: () => {Navigator.pop(context), getImage()}),
+                new ListTile(
+                  leading: new Icon(Icons.folder_shared),
+                  title: new Text('Gallery'),
+                  onTap: () => {Navigator.pop(context), getImageGallery()},
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    setState(() {
+      _image = image;
+    });
+  }
+
+  Future getImageGallery() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    print(image);
     setState(() {
       _image = image;
     });
@@ -72,8 +100,7 @@ class _CreateUserState extends State<CreateUser> {
                       padding: const EdgeInsets.fromLTRB(0, 20.0, 0, 20.0),
                       child: GestureDetector(
                           onTap: () {
-//                            print('555');
-                            getImage();
+                            _settingModalBottomSheet(context);
                           },
                           child: _image == null
                               ? Badge(
