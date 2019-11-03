@@ -13,7 +13,6 @@ class MyApp extends StatelessWidget {
       home: HomePage(),
       title: 'Sanook',
       routes: {
-//        '/friend': (context) => FriendsPage(),
         '/register': (context) => Register(),
         '/phoneregister': (context) =>PhoneRegister()
       },

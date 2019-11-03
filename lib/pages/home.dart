@@ -5,6 +5,7 @@ import 'package:new_flutter/pages/createUser.dart';
 import 'package:new_flutter/pages/friends.dart';
 import 'package:new_flutter/pages/register.dart';
 import 'package:toast/toast.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -19,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  bool spinner = false;
 
   @override
   void initState() {
@@ -35,7 +37,7 @@ class _HomePageState extends State<HomePage> {
     if (user != null) {
       if (user.displayName != null && user.displayName != "") {
         Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => FriendsPage(user)));
+            MaterialPageRoute(builder: (context) => FriendsPage()));
       } else {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => CreateUser(user)));
@@ -44,16 +46,24 @@ class _HomePageState extends State<HomePage> {
   }
 
   void signIn() {
+    print('spinnnnn');
+    setState(() {
+      spinner = true;
+    });
     firebaseAuth
         .signInWithEmailAndPassword(
             email: _usernameController.text, password: _passwordController.text)
         .then((user) {
-      print(' Success=> $user');
+      setState(() {
+        spinner = false;
+      });
       checkAuth(context);
     }).catchError((error) {
+      setState(() {
+        spinner = false;
+      });
       Toast.show(error.message, context,
           duration: Toast.LENGTH_LONG, gravity: Toast.TOP);
-      print(' Error=> $error');
     });
   }
 
@@ -76,118 +86,123 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         body: Container(
       child: Center(
-        child: ListView(
+        child: !spinner
+            ? ListView(
 //        mainAxisAlignment: MainAxisAlignment.center,
-          shrinkWrap: true,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
-              child: Image.asset(
-                'images/love.png',
-                height: 150,
-                width: 150,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(50, 10, 50, 5),
-              child: TextField(
-                style: Theme.of(context).textTheme.title,
-                decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(8.0),
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                    isDense: true),
-                controller: _usernameController,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(50, 5, 50, 10),
-              child: TextField(
-                style: Theme.of(context).textTheme.title,
-                decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(8.0),
-                    labelText: 'Password',
-                    border: OutlineInputBorder(),
-                    isDense: true),
-                controller: _passwordController,
-                obscureText: true,
-              ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
-                  child: ButtonTheme(
-                    minWidth: double.infinity,
-                    child: RaisedButton(
-                      child: Text('Login'),
-                      color: Color(0xffEC5569),
-                      onPressed: () {
-                        signIn();
-                      },
+                shrinkWrap: true,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                    child: Image.asset(
+                      'images/love.png',
+                      height: 150,
+                      width: 150,
                     ),
                   ),
-                ),
-                buildOtherLine(),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
-                  child: ButtonTheme(
-                    minWidth: double.infinity,
-                    child: RaisedButton(
-                      child: Text('Register'),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Register()));
-                      },
-                      color: Colors.black12,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(50, 10, 50, 5),
+                    child: TextField(
+                      style: Theme.of(context).textTheme.title,
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(8.0),
+                          labelText: 'Email',
+                          border: OutlineInputBorder(),
+                          isDense: true),
+                      controller: _usernameController,
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
-                  child: ButtonTheme(
-                    minWidth: double.infinity,
-                    child: RaisedButton(
-                      child: Text(
-                        'Login With Mobile',
-                        style: TextStyle(color: Color(0xffEC5569)),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(50, 5, 50, 10),
+                    child: TextField(
+                      style: Theme.of(context).textTheme.title,
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(8.0),
+                          labelText: 'Password',
+                          border: OutlineInputBorder(),
+                          isDense: true),
+                      controller: _passwordController,
+                      obscureText: true,
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+                        child: ButtonTheme(
+                          minWidth: double.infinity,
+                          child: RaisedButton(
+                            child: Text('Login'),
+                            color: Color(0xffEC5569),
+                            onPressed: () {
+                              signIn();
+                            },
+                          ),
+                        ),
                       ),
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(
-                            context, '/phoneregister');
+                      buildOtherLine(),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+                        child: ButtonTheme(
+                          minWidth: double.infinity,
+                          child: RaisedButton(
+                            child: Text('Register'),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Register()));
+                            },
+                            color: Colors.black12,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+                        child: ButtonTheme(
+                          minWidth: double.infinity,
+                          child: RaisedButton(
+                            child: Text(
+                              'Login With Mobile',
+                              style: TextStyle(color: Color(0xffEC5569)),
+                            ),
+                            onPressed: () {
+                              Navigator.pushReplacementNamed(
+                                  context, '/phoneregister');
 //                        Navigator.push(
 //                            context,
 //                            MaterialPageRoute(
 //                                builder: (context) => FriendsPage()));
-                      },
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
-                  child: ButtonTheme(
-                    minWidth: double.infinity,
-                    child: RaisedButton(
-                      child: Text(
-                        'Login Out',
-                        style: TextStyle(color: Color(0xffEC5569)),
+                            },
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                      onPressed: () {
-                        signOut(context);
-                      },
-                      color: Colors.white,
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+                        child: ButtonTheme(
+                          minWidth: double.infinity,
+                          child: RaisedButton(
+                            child: Text(
+                              'Login Out',
+                              style: TextStyle(color: Color(0xffEC5569)),
+                            ),
+                            onPressed: () {
+                              signOut(context);
+                            },
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
-            Center(child: Text('2019\u00a9 Panudeth Jaruwong'))
-          ],
-        ),
+                  Center(child: Text('2019\u00a9 Panudeth Jaruwong'))
+                ],
+              )
+            : SpinKitPumpingHeart(
+                color: Colors.white,
+                size: 50.0,
+              ),
       ),
     ));
   }

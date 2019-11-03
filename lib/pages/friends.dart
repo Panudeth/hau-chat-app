@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:new_flutter/pages/home.dart';
 
 class FriendsPage extends StatefulWidget {
-  final FirebaseUser user;
-  FriendsPage(this.user, {Key key}) : super(key: key);
+//  final FirebaseUser user;
+//  FriendsPage(this.user, {Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -19,28 +19,34 @@ class FriendsPage extends StatefulWidget {
 }
 
 class _FriendsState extends State<FriendsPage> {
-  List<String> list = ['xxx', 'yyy', 'zzz'];
+  FirebaseUser userAuth;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   Map<String, dynamic> dataUser;
   Uint8List bytesImg;
-//  List<DocumentSnapshot> dataUser;
 
   void initState() {
     super.initState();
-    GetUserData();
+    checkAuth(context);
   }
 
-  Image imm;
-  Future GetUserData() async {
-    var document =
-        await Firestore.instance.document('users/${widget.user.uid}');
+  Future checkAuth(BuildContext context) async {
+    FirebaseUser user = await firebaseAuth.currentUser();
+    if (user != null) {
+      setState(() {
+        userAuth = user;
+      });
+      getUserData();
+    }
+  }
+
+  Future getUserData() async {
+    var document = Firestore.instance.document('users/${userAuth.uid}');
     document.snapshots().listen((snapShotData) {
-//      print(snapShotData.data);
       setState(() {
         dataUser = snapShotData.data;
-        bytesImg = base64.decode(dataUser['imgAvatar']);
-        imm = Image.memory(bytesImg);
-        print(imm);
+        if (dataUser['imgAvatar'] != null && dataUser['imgAvatar'] != '') {
+          bytesImg = base64.decode(dataUser['imgAvatar']);
+        }
       });
     });
   }
@@ -90,49 +96,52 @@ class _FriendsState extends State<FriendsPage> {
                   child: ListTile(
                     leading: CircleAvatar(
                       radius: 28.0,
-                      backgroundImage: MemoryImage(bytesImg),
+                      backgroundImage: bytesImg != null
+                          ? MemoryImage(bytesImg)
+                          : NetworkImage(
+                              'https://image.shutterstock.com/image-vector/social-media-avatar-user-icon-260nw-1061793911.jpg'),
 //                      child: Text(
-//                        widget.user.email.substring(0, 1).toUpperCase(),
+//                        'T',
 //                        style: TextStyle(fontSize: 30.0),
 //                      ),
                     ),
                     title: Text(
-                      dataUser['displayName'],
+                      dataUser != null ? dataUser['displayName'] : '',
                       style: TextStyle(fontSize: 20.0),
                     ),
                     subtitle: Text(
-                      widget.user.email,
+                      userAuth.email != null ? userAuth.email : '',
                     ),
                   ),
                 ),
               ),
             ),
             Divider(),
-            ButtonTheme(
-              child: RaisedButton(
-                onPressed: () {},
-                color: Colors.black45,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 25,
-                      child: Text(
-                        widget.user.email.substring(0, 1).toUpperCase(),
-                        style: TextStyle(fontSize: 30.0),
-                      ),
-                    ),
-                    title: Text(
-                      widget.user.email,
-                      style: TextStyle(fontSize: 20.0),
-                    ),
-                    subtitle: Text(
-                      widget.user.uid,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+//            ButtonTheme(
+//              child: RaisedButton(
+//                onPressed: () {},
+//                color: Colors.black45,
+//                child: Padding(
+//                  padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
+//                  child: ListTile(
+//                    leading: CircleAvatar(
+//                      radius: 25,
+//                      child: Text(
+//                        dataUser['email'].substring(0, 1).toUpperCase(),
+//                        style: TextStyle(fontSize: 30.0),
+//                      ),
+//                    ),
+//                    title: Text(
+//                      dataUser['email'],
+//                      style: TextStyle(fontSize: 20.0),
+//                    ),
+//                    subtitle: Text(
+//                      userAuth.uid,
+//                    ),
+//                  ),
+//                ),
+//              ),
+//            ),
             RaisedButton(child: Text('USER'), onPressed: () {}),
             RaisedButton(
                 child: Text('LOGOUT'),

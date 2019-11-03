@@ -23,7 +23,7 @@ class _RegisterState extends State<Register> {
     username = _usernameController.text;
     password = _passwordController.text;
     print('user = $username | pass = $password');
-    final FirebaseUser firebaseUser = await firebaseAuth
+    await firebaseAuth
         .createUserWithEmailAndPassword(email: username, password: password)
         .then((user) {
       signIn();
@@ -47,8 +47,8 @@ class _RegisterState extends State<Register> {
     FirebaseUser user = await firebaseAuth.currentUser();
     if (user != null) {
       if (user.displayName != null && user.displayName != "") {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => FriendsPage(user)));
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => FriendsPage()));
       } else {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => CreateUser(user)));

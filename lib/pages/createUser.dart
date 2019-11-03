@@ -27,14 +27,14 @@ class _CreateUserState extends State<CreateUser> {
       UserUpdateInfo updateUser = UserUpdateInfo();
       updateUser.displayName = _displayName.text;
       val.updateProfile(updateUser).then((user) {
-        UpdateUserData();
+        updateUserData();
       }).catchError((e) {
         print(e.message);
       });
     });
   }
 
-  Future UpdateUserData() async {
+  Future updateUserData() async {
     Map<String, dynamic> map = Map();
     map['uid'] = widget.user.uid;
     map['email'] = widget.user.email;
@@ -54,7 +54,7 @@ class _CreateUserState extends State<CreateUser> {
     firebaseUser = await firebaseAuth.currentUser();
     Navigator.of(context).popUntil((route) => route.isFirst);
     Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => FriendsPage(firebaseUser)));
+        MaterialPageRoute(builder: (context) => FriendsPage()));
   }
 
   void signOut(BuildContext context) {
