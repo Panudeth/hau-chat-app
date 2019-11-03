@@ -84,7 +84,8 @@ class _CreateUserState extends State<CreateUser> {
   }
 
   Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    var image = await ImagePicker.pickImage(
+        source: ImageSource.camera, imageQuality: 50);
     List<int> imageBytes = await image.readAsBytes();
     setState(() {
       fileImage = image;
@@ -93,7 +94,8 @@ class _CreateUserState extends State<CreateUser> {
   }
 
   Future getImageGallery() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var image = await ImagePicker.pickImage(
+        source: ImageSource.gallery, imageQuality: 50);
     List<int> imageBytes = await image.readAsBytes();
     setState(() {
       fileImage = image;
