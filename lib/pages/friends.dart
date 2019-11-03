@@ -1,5 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +21,29 @@ class FriendsPage extends StatefulWidget {
 class _FriendsState extends State<FriendsPage> {
   List<String> list = ['xxx', 'yyy', 'zzz'];
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  Map<String, dynamic> dataUser;
+  Uint8List bytesImg;
+//  List<DocumentSnapshot> dataUser;
+
+  void initState() {
+    super.initState();
+    GetUserData();
+  }
+
+  Image imm;
+  Future GetUserData() async {
+    var document =
+        await Firestore.instance.document('users/${widget.user.uid}');
+    document.snapshots().listen((snapShotData) {
+//      print(snapShotData.data);
+      setState(() {
+        dataUser = snapShotData.data;
+        bytesImg = base64.decode(dataUser['imgAvatar']);
+        imm = Image.memory(bytesImg);
+        print(imm);
+      });
+    });
+  }
 
   void signOut(BuildContext context) {
     firebaseAuth.signOut();
@@ -55,21 +81,30 @@ class _FriendsState extends State<FriendsPage> {
                 ),
               ),
             ),
-            ListTile(
-              onTap: () {},
-              leading: CircleAvatar(
-                radius: 40,
-                child: Text(
-                  widget.user.displayName.substring(0, 1).toUpperCase(),
-                  style: TextStyle(fontSize: 30.0),
+            ButtonTheme(
+              child: RaisedButton(
+                onPressed: () {},
+                color: Colors.black45,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 28.0,
+                      backgroundImage: MemoryImage(bytesImg),
+//                      child: Text(
+//                        widget.user.email.substring(0, 1).toUpperCase(),
+//                        style: TextStyle(fontSize: 30.0),
+//                      ),
+                    ),
+                    title: Text(
+                      dataUser['displayName'],
+                      style: TextStyle(fontSize: 20.0),
+                    ),
+                    subtitle: Text(
+                      widget.user.email,
+                    ),
+                  ),
                 ),
-              ),
-              title: Text(
-                widget.user.displayName,
-                style: TextStyle(fontSize: 20.0),
-              ),
-              subtitle: Text(
-                widget.user.email,
               ),
             ),
             Divider(),
@@ -98,11 +133,7 @@ class _FriendsState extends State<FriendsPage> {
                 ),
               ),
             ),
-            RaisedButton(
-                child: Text('USER'),
-                onPressed: () {
-                  print(widget.user.displayName);
-                }),
+            RaisedButton(child: Text('USER'), onPressed: () {}),
             RaisedButton(
                 child: Text('LOGOUT'),
                 onPressed: () {
