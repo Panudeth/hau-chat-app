@@ -35,9 +35,10 @@ class _HomePageState extends State<HomePage> {
   Future checkAuth(BuildContext context) async {
     FirebaseUser user = await firebaseAuth.currentUser();
     if (user != null) {
+      print('userrrr ${user.displayName}');
       if (user.displayName != null && user.displayName != "") {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => FriendsPage()));
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => FriendsPage()));
       } else {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => CreateUser(user)));
@@ -46,7 +47,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   void signIn() {
-    print('spinnnnn');
     setState(() {
       spinner = true;
     });
