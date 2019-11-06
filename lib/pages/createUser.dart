@@ -4,6 +4,7 @@ import 'package:badges/badges.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'friends.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -53,8 +54,8 @@ class _CreateUserState extends State<CreateUser> {
     await firebaseUser?.reload();
     firebaseUser = await firebaseAuth.currentUser();
     Navigator.of(context).popUntil((route) => route.isFirst);
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => FriendsPage()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => FriendsPage()));
   }
 
   void signOut(BuildContext context) {
@@ -86,19 +87,43 @@ class _CreateUserState extends State<CreateUser> {
   Future getImage() async {
     var image = await ImagePicker.pickImage(
         source: ImageSource.camera, imageQuality: 50);
-    List<int> imageBytes = await image.readAsBytes();
     setState(() {
       fileImage = image;
-      base64Image = base64Encode(imageBytes);
     });
+    cropImg(image);
   }
 
   Future getImageGallery() async {
     var image = await ImagePicker.pickImage(
         source: ImageSource.gallery, imageQuality: 50);
-    List<int> imageBytes = await image.readAsBytes();
     setState(() {
       fileImage = image;
+    });
+    cropImg(image);
+  }
+
+  void cropImg(image) async {
+    File croppedFile = await ImageCropper.cropImage(
+        sourcePath: image.path,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio16x9
+        ],
+        androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        iosUiSettings: IOSUiSettings(
+          minimumAspectRatio: 1.0,
+        ));
+    List<int> imageBytes = await croppedFile.readAsBytes();
+    setState(() {
+      fileImage = croppedFile;
       base64Image = base64Encode(imageBytes);
     });
   }
