@@ -22,6 +22,7 @@ class _SearchFriendState extends State<SearchFriend> {
   FirebaseUser userAuth;
   bool addFriend = false;
   bool hasFriend = false;
+  bool firstSearch = false;
 
   void initState() {
     super.initState();
@@ -34,7 +35,6 @@ class _SearchFriendState extends State<SearchFriend> {
       setState(() {
         userAuth = user;
       });
-      getUserData();
     }
   }
 
@@ -48,6 +48,7 @@ class _SearchFriendState extends State<SearchFriend> {
                 {
                   setState(() {
                     hasFriend = false;
+                    firstSearch = true;
                   })
                 }
               else
@@ -204,11 +205,13 @@ class _SearchFriendState extends State<SearchFriend> {
                   ],
                 )
               : Container(
-                  child: Center(
-                      child: Padding(
-                    padding: const EdgeInsets.all(30.0),
-                    child: Text('No Friend'),
-                  )),
+                  child: firstSearch
+                      ? Center(
+                          child: Padding(
+                          padding: const EdgeInsets.all(30.0),
+                          child: Text('No Friend'),
+                        ))
+                      : Container(),
                 )
         ],
       ),
