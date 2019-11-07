@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:new_flutter/pages/home.dart';
 import 'package:new_flutter/pages/search_friend_page.dart';
@@ -107,6 +108,7 @@ class _FriendsState extends State<FriendsPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
                   decoration: InputDecoration(
+                      fillColor: Colors.red,
                       suffixIcon: Icon(
                         Icons.search,
                         size: 15.0,
@@ -150,7 +152,6 @@ class _FriendsState extends State<FriendsPage> {
               children: <Widget>[
                 Expanded(
                   child: SizedBox(
-                    height: 370,
                     child: ListView.builder(
                         shrinkWrap: true,
                         itemCount: friendData.length,
@@ -164,7 +165,7 @@ class _FriendsState extends State<FriendsPage> {
                                     const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
                                 child: ListTile(
                                   leading: CircleAvatar(
-                                    radius: 28.0,
+                                    radius: 25.0,
                                     backgroundImage: bytesImg != null
                                         ? MemoryImage(base64.decode(
                                             friendData[index]['imgAvatar']))
@@ -173,7 +174,7 @@ class _FriendsState extends State<FriendsPage> {
                                   ),
                                   title: Text(
                                     friendData[index]['displayName'],
-                                    style: TextStyle(fontSize: 20.0),
+                                    style: TextStyle(fontSize: 16.0),
                                   ),
                                   subtitle: Text(friendData[index]['email']),
                                 ),
@@ -185,12 +186,6 @@ class _FriendsState extends State<FriendsPage> {
                 ),
               ],
             ),
-            RaisedButton(child: Text('USER'), onPressed: () {}),
-            RaisedButton(
-                child: Text('LOGOUT'),
-                onPressed: () {
-                  signOut(context);
-                }),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
