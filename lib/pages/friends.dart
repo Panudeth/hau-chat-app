@@ -22,7 +22,9 @@ class FriendsPage extends StatefulWidget {
 class _FriendsState extends State<FriendsPage> {
   FirebaseUser userAuth;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final Firestore _firestore = Firestore.instance;
   Map<String, dynamic> dataUser;
+  List friendData = [];
   Uint8List bytesImg;
 
   void initState() {
@@ -37,6 +39,7 @@ class _FriendsState extends State<FriendsPage> {
         userAuth = user;
       });
       getUserData();
+      getFriends();
     }
   }
 
@@ -60,12 +63,34 @@ class _FriendsState extends State<FriendsPage> {
         ModalRoute.withName('/'));
   }
 
+  void getFriends() async {
+    await _firestore
+        .collection('users')
+        .document(userAuth.uid)
+        .collection('friends')
+        .snapshots()
+        .listen((data) {
+      setState(() {
+        friendData = [];
+      });
+      setState(() {
+        data.documents.forEach((doc) {
+          friendData.add(doc);
+        });
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Center(child: Text('Home')),
-          leading: IconButton(icon: Icon(Icons.settings), onPressed: () {}),
+          leading: IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {
+                signOut(context);
+              }),
           actions: <Widget>[
             IconButton(
                 icon: Icon(Icons.person_add),
@@ -115,14 +140,51 @@ class _FriendsState extends State<FriendsPage> {
                       dataUser != null ? dataUser['displayName'] : '',
                       style: TextStyle(fontSize: 20.0),
                     ),
-                    subtitle: Text(
-                      userAuth.email != null ? userAuth.email : '',
-                    ),
+                    subtitle: Text(dataUser != null ? dataUser['email'] : ''),
                   ),
                 ),
               ),
             ),
             Divider(),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: SizedBox(
+                    height: 370,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: friendData.length,
+                        itemBuilder: (context, index) {
+                          return ButtonTheme(
+                            child: RaisedButton(
+                              onPressed: () {},
+                              color: Colors.black45,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    radius: 28.0,
+                                    backgroundImage: bytesImg != null
+                                        ? MemoryImage(base64.decode(
+                                            friendData[index]['imgAvatar']))
+                                        : NetworkImage(
+                                            'https://image.shutterstock.com/image-vector/social-media-avatar-user-icon-260nw-1061793911.jpg'),
+                                  ),
+                                  title: Text(
+                                    friendData[index]['displayName'],
+                                    style: TextStyle(fontSize: 20.0),
+                                  ),
+                                  subtitle: Text(friendData[index]['email']),
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                  ),
+                ),
+              ],
+            ),
             RaisedButton(child: Text('USER'), onPressed: () {}),
             RaisedButton(
                 child: Text('LOGOUT'),
