@@ -82,6 +82,36 @@ class _FriendsState extends State<FriendsPage> {
     });
   }
 
+  List<Widget> ListMyWidgets() {
+    List<Widget> list = new List();
+    for (var index = 0; index < friendData.length; index++) {
+      list.add(new ButtonTheme(
+        child: RaisedButton(
+          onPressed: () {},
+          color: Colors.black45,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
+            child: ListTile(
+              leading: CircleAvatar(
+                radius: 25.0,
+                backgroundImage: bytesImg != null
+                    ? MemoryImage(base64.decode(friendData[index]['imgAvatar']))
+                    : NetworkImage(
+                        'https://image.shutterstock.com/image-vector/social-media-avatar-user-icon-260nw-1061793911.jpg'),
+              ),
+              title: Text(
+                friendData[index]['displayName'],
+                style: TextStyle(fontSize: 16.0),
+              ),
+              subtitle: Text(friendData[index]['email']),
+            ),
+          ),
+        ),
+      ));
+    }
+    return list;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,6 +134,7 @@ class _FriendsState extends State<FriendsPage> {
         body: ListView(
           children: <Widget>[
             Container(
+              decoration: BoxDecoration(color: Colors.black26),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
@@ -148,44 +179,9 @@ class _FriendsState extends State<FriendsPage> {
               ),
             ),
             Divider(),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: SizedBox(
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: friendData.length,
-                        itemBuilder: (context, index) {
-                          return ButtonTheme(
-                            child: RaisedButton(
-                              onPressed: () {},
-                              color: Colors.black45,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
-                                child: ListTile(
-                                  leading: CircleAvatar(
-                                    radius: 25.0,
-                                    backgroundImage: bytesImg != null
-                                        ? MemoryImage(base64.decode(
-                                            friendData[index]['imgAvatar']))
-                                        : NetworkImage(
-                                            'https://image.shutterstock.com/image-vector/social-media-avatar-user-icon-260nw-1061793911.jpg'),
-                                  ),
-                                  title: Text(
-                                    friendData[index]['displayName'],
-                                    style: TextStyle(fontSize: 16.0),
-                                  ),
-                                  subtitle: Text(friendData[index]['email']),
-                                ),
-                              ),
-                            ),
-                          );
-                        }),
-                  ),
-                ),
-              ],
-            ),
+            Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: ListMyWidgets()),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
